@@ -1,0 +1,66 @@
+# Frozen policy recipe for pi_mix_v3.
+# Revision SHAs pinned 2026-03-12 via huggingface_hub.list_repo_commits().
+#
+# Changes from pi_mix_v2:
+#   - Added neuralchemy/Prompt-injection-dataset (6,274 rows, Apache 2.0, March 2026)
+#   - Added wambosec/prompt-injections-subtle (933 rows, MIT, Jan 2026)
+#   - Removed Harelix/Prompt-Injection-Mixed-Techniques-2024 (deleted from HF)
+#     and its fallback rubend18/ChatGPT-Jailbreak-Prompts (only 79 rows, no longer needed)
+#   - Removed markush1/LLM-Injection-Dataset (deleted from HF, license never resolved)
+
+version: pi_mix_v3
+seed: 42
+min_chars: 8
+max_chars: 4000
+balance: downsample
+
+dedup:
+  method: exact+minhash
+  num_perm: 128
+  threshold: 0.7
+
+sources:
+  - repo: jayavibhav/prompt-injection
+    revision: a5bd9869c16d22ffebda9fa91a13a759b8669bb6
+    cap: 30000
+
+  - repo: neuralchemy/Prompt-injection-dataset
+    revision: 895c8658ba32650917fd13bd209e03e2e5a6d568
+    cap: 6000
+
+  - repo: wambosec/prompt-injections-subtle
+    revision: cd789a6e362aa72624d7f835c5270c8c3bdaf524
+    cap: null   # use all rows (~933)
+
+  - repo: deepset/prompt-injections
+    revision: 4f61ecb038e9c3fb77e21034b22511b523772cdd
+    cap: 3500
+    ood_eval: true   # ONLY OOD source; never in train split
+
+  - repo: hackaprompt/hackaprompt-dataset
+    revision: null  # gated: cannot pin without accepting HuggingFace terms
+    cap: 20000
+    ood_eval: false
+    gated: true
+
+  - repo: xTRam1/safe-guard-prompt-injection
+    revision: a3a877d608f37b7d20d9945671902df895ecdb46
+    cap: 5000
+
+  - repo: allenai/wildjailbreak
+    revision: 5ddc12a7894f842b0619b8e1c7ee496b198af009
+    cap: 20000
+    gated: true
+    note: >
+      adversarial_harmful rows require manual validation before inclusion.
+      Rows with data_type=adversarial_harmful must be reviewed for quality
+      and poisoning risk before training.
+
+  - repo: local/edge_case_corpus_v1
+    path: ml/data/manual/edge_case_corpus_v1.jsonl
+    cap: null   # use all rows
+
+policy:
+  max_source_concentration: 0.25
+  hackaprompt_ood_policy: in_domain
+  wildjailbreak_adversarial_harmful: requires_manual_validation

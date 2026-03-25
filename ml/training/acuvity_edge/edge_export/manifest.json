@@ -1,0 +1,27 @@
+{
+  "source": "acuvity/distilbert-base-uncased-prompt-injection-v0.1",
+  "model_type": "distilbert",
+  "num_labels": 2,
+  "id2label": {
+    "0": "SAFE",
+    "1": "INJECTION"
+  },
+  "label2id": {
+    "SAFE": 0,
+    "INJECTION": 1
+  },
+  "dtype": "float16",
+  "export_dir": "./acuvity_edge/edge_export",
+  "files": {
+    "model.safetensors": 133922428,
+    "tokenizer_config.json": 1417,
+    "special_tokens_map.json": 695,
+    "config.json": 683,
+    "tokenizer.json": 711649,
+    "vocab.txt": 231508
+  },
+  "safetensors_sha256": {
+    "model.safetensors": "58b5dad26cc22ef657b139d29255275f2a4bd5f15a81b3104def0ab6cbbdfeeb"
+  },
+  "notes": "Package contains model.safetensors (FP16), config.json and minimal tokenizer files. Ready for Candle/WASM."
+}

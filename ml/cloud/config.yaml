@@ -1,0 +1,41 @@
+# Google Cloud / Vertex AI training configuration
+# Fill in your project-specific values before use.
+
+project_id: your-gcp-project
+region: us-central1
+staging_bucket: gs://your-training-bucket/staging
+service_account: vertex-training@your-gcp-project.iam.gserviceaccount.com
+
+container:
+  image_uri: us-central1-docker.pkg.dev/your-gcp-project/injection-detector/trainer:latest
+  dockerfile: ml/cloud/Dockerfile
+  base_image: pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
+
+job:
+  display_name_prefix: injection-detector
+  machine_type: n1-standard-8
+  accelerator_type: NVIDIA_TESLA_T4
+  accelerator_count: 1
+  replica_count: 1
+  boot_disk_size_gb: 200
+
+training:
+  model_config: config/model.yaml
+  overrides:
+    training.batch_size: 64
+    runtime.mixed_precision: bf16
+
+# WARNING: This config uses pi_mix_v1 which includes allenai/wildjailbreak examples.
+# Those examples degraded injection recall by ~20pp (Recall@1%FPR: 0.759 vs 0.956).
+# For injection model training, use config_injection_only.yaml instead.
+# This config is retained for reference only.
+data:
+  train_uri: gs://your-training-bucket/data/pi_mix_v1/train.jsonl
+  val_uri: gs://your-training-bucket/data/pi_mix_v1/val.jsonl
+  output_uri: gs://your-training-bucket/models/bert-tiny-pi-v1/${JOB_TS}
+
+monitoring:
+  experiment_name: injection-detector
+  tensorboard_resource_name: projects/your-project-number/locations/us-central1/tensorboards/your-tensorboard-id
+  tensorboard_log_dir: gs://your-training-bucket/tensorboard/${JOB_TS}
+  enable_hptuning: false

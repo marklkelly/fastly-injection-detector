@@ -1,0 +1,64 @@
+# Frozen policy recipe for pi_mix_v2. Must be committed before split/output
+# implementation begins (Phase 1.4 sequencing constraint).
+# Revision SHAs pinned 2026-03-12 via huggingface_hub.list_repo_commits().
+
+version: pi_mix_v2
+seed: 42
+min_chars: 8
+max_chars: 4000   # provisional; Phase 2.4 may lower after token-length audit
+balance: downsample
+
+dedup:
+  method: exact+minhash
+  num_perm: 128
+  threshold: 0.7   # provisional until duplicate-sample validation is complete
+
+sources:
+  - repo: jayavibhav/prompt-injection
+    revision: a5bd9869c16d22ffebda9fa91a13a759b8669bb6
+    cap: 30000
+
+  - repo: deepset/prompt-injections
+    revision: 4f61ecb038e9c3fb77e21034b22511b523772cdd
+    cap: 3500
+    ood_eval: true   # ONLY OOD source; never in train split
+
+  - repo: hackaprompt/hackaprompt-dataset
+    revision: null  # gated: cannot pin without accepting HuggingFace terms; set after access
+    cap: 20000
+    ood_eval: false   # fully in-domain (partial same-source OOD is not true OOD)
+    gated: true
+
+  - repo: xTRam1/safe-guard-prompt-injection
+    revision: a3a877d608f37b7d20d9945671902df895ecdb46
+    cap: 5000
+
+  - repo: Harelix/Prompt-Injection-Mixed-Techniques-2024
+    revision: null   # unavailable as of 2026-03-12 (HTTP 404)
+    cap: 5000
+    optional: true
+    fallback_repo: rubend18/ChatGPT-Jailbreak-Prompts
+    fallback_revision: b93e4982f8f8ad2d82c6d35e3c00d161844ad70a
+
+  - repo: allenai/wildjailbreak
+    revision: 5ddc12a7894f842b0619b8e1c7ee496b198af009
+    cap: 20000
+    gated: true
+    note: >
+      adversarial_harmful rows require manual validation before inclusion.
+      Rows with data_type=adversarial_harmful must be reviewed for quality
+      and poisoning risk before Phase 3 training.
+
+  - repo: markush1/LLM-Injection-Dataset
+    revision: null   # unavailable as of 2026-03-12 (HTTP 404)
+    cap: 15000
+    pending_license_review: true
+
+  - repo: local/edge_case_corpus_v1
+    path: ml/data/manual/edge_case_corpus_v1.jsonl
+    cap: null   # use all rows
+
+policy:
+  max_source_concentration: 0.25
+  hackaprompt_ood_policy: in_domain
+  wildjailbreak_adversarial_harmful: requires_manual_validation

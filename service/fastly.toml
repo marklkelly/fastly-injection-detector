@@ -1,0 +1,14 @@
+# This file describes a Fastly Compute package. To learn more visit:
+# https://www.fastly.com/documentation/reference/compute/fastly-toml
+
+authors = []
+description = "BERT-tiny prompt injection detector running on Fastly Compute"
+language = "rust"
+manifest_version = 3
+name = "injection-detector"
+service_id = ""  # Set FASTLY_SERVICE_ID env var or pass --service-id at deploy time
+
+[local_server]
+
+[scripts]
+  build = "cargo build --release --target wasm32-wasip1 --features inference,wizer-init"

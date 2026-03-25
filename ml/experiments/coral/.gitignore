@@ -1,0 +1,31 @@
+# Virtual environments
+venv_coral/
+venv/
+.venv/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Model artifacts (binaries - too large for git)
+models/
+models_192_for_delta/
+models_optimized/
+weights_extracted/
+weights_extracted_v2/
+weights_final/
+*.tflite
+*.npz
+*.pth
+*.tar.gz
+
+# Data files
+data/
+*.csv
+*.log
+
+# macOS
+.DS_Store

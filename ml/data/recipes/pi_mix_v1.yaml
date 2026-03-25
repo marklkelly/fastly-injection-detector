@@ -1,0 +1,34 @@
+# Canonical recipe for pi_mix_v1 — matches hardcoded defaults in build.py prior to Phase 1.
+# Revision SHAs pinned 2026-03-12 via huggingface_hub.list_repo_commits().
+
+version: pi_mix_v1
+seed: 42
+min_chars: 8
+max_chars: 4000
+balance: downsample
+
+dedup:
+  method: sha256_exact
+  note: >
+    Exact deduplication on sha256(lower(text)). MinHash near-dedup
+    is planned for pi_mix_v2 (Phase 2).
+
+sources:
+  - repo: jayavibhav/prompt-injection
+    revision: a5bd9869c16d22ffebda9fa91a13a759b8669bb6
+    cap: 200000
+
+  - repo: xTRam1/safe-guard-prompt-injection
+    revision: a3a877d608f37b7d20d9945671902df895ecdb46
+    cap: 10000
+
+  - repo: Harelix/Prompt-Injection-Mixed-Techniques-2024
+    revision: null  # unavailable as of 2026-03-12 (HTTP 404)
+    cap: 10000
+    optional: true
+    fallback_repo: rubend18/ChatGPT-Jailbreak-Prompts
+    fallback_revision: b93e4982f8f8ad2d82c6d35e3c00d161844ad70a
+
+  - repo: darkknight25/Prompt_Injection_Benign_Prompt_Dataset
+    revision: a0fc54fb563468a7fd64a9412718ce7cdb366666
+    cap: 5000

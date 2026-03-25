@@ -1,0 +1,70 @@
+# Shared model and training configuration.
+# This file is the canonical source of truth for ml/training/train_cls.py.
+
+model:
+  artifact_name: bert-tiny-pi-v1
+  backbone: prajjwal1/bert-tiny
+  num_labels: 2
+  max_length: 128
+  truncation_strategy: head_tail
+  labels:
+    "0": SAFE
+    "1": INJECTION
+  teacher_model: protectai/deberta-v3-small-prompt-injection-v2
+  distillation:
+    enabled: true
+    alpha: 0.5
+    temperature: 2.0
+    teacher_max_length: 256
+    cache_teacher_logits: true
+
+# IMPORTANT: The dataset section below references pi_mix_v2 (includes wildjailbreak).
+# The production injection model (bert-tiny-injection-only-20260317, 2026-03-17)
+# was trained on pi_mix_v1_injection_only (wildjailbreak removed) via Vertex AI.
+# Training on pi_mix_v2 locally will reproduce an older, lower-recall model.
+# For local reproduction of the production model:
+#   1. Use the GCS dataset: gs://fastly-injection-detector-training/data/pi_mix_v1_injection_only/
+#   2. Or rebuild locally: python3 ml/data/build.py --recipe ml/data/recipes/pi_mix_v3.yaml
+#      (pi_mix_v3 also excludes wildjailbreak)
+dataset:
+  version: pi_mix_v2
+  train_path: ml/data/versions/pi_mix_v2/train.jsonl
+  val_path: ml/data/versions/pi_mix_v2/val.jsonl
+  test_path: null
+  labels_path: ml/data/versions/pi_mix_v2/labels.json
+
+training:
+  epochs: 3
+  max_steps: null
+  learning_rate: 5.0e-5
+  weight_decay: 0.01
+  batch_size: 32
+  eval_batch_size: 64
+  gradient_accumulation_steps: 1
+  grad_checkpointing: false
+  label_smoothing_factor: 0.0
+  logging_steps: 100
+  save_steps: 1000
+  eval_steps: 1000
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.05
+  warmup_steps: null
+  early_stopping_patience: 3
+  best_model_metric: recall_at_1pct_fpr
+  seed: 42
+
+runtime:
+  device: auto
+  mixed_precision: auto
+  dataloader_workers: 4
+
+outputs:
+  model_dir: ml/models/bert-tiny-pi-v1
+  save_hf_checkpoint: true
+  save_edge_export: true
+  write_model_card: true
+  write_eval_metrics: true
+
+evaluation:
+  ood_path: null
+  prior: 0.02

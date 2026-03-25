@@ -1,0 +1,24 @@
+{
+  "input": {
+    "scale": 0.021636275574564934,
+    "zero_point": -2,
+    "dtype": "<class 'numpy.int8'>",
+    "shape": [
+      1,
+      128,
+      1,
+      128
+    ]
+  },
+  "output": {
+    "scale": 0.027989713475108147,
+    "zero_point": 14,
+    "dtype": "<class 'numpy.int8'>",
+    "shape": [
+      1,
+      128,
+      1,
+      128
+    ]
+  }
+}

@@ -1,0 +1,183 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+.venv_tf/
+.hfmp-venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+*.ipynb_checkpoints
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Rust
+target/
+# Cargo.lock is committed for reproducible builds (application crate)
+**/*.rs.bk
+*.pdb
+pkg/
+wasm-pack.log
+
+# Fastly
+.fastly/
+fastly_compute_at_edge_*.tar.gz
+pkg/
+
+# ML/Data
+*.arrow
+*.parquet
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.npy
+*.npz
+data/
+*.jsonl
+checkpoints/
+runs/
+wandb/
+mlruns/
+*.ckpt
+*.pth
+*.pt
+*.safetensors
+
+# Models (large files)
+*.onnx
+*.pb
+*.bin
+*.msgpack
+*.nnef
+*.tflite
+model_*.json
+!tokenizer.json
+!service/assets/tokenizer.json
+
+# Training outputs  
+out-*/
+models/
+!ml/models/
+*.log
+train.log
+eval_metrics.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+*.local.json
+!.claude/settings.local.json
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+assets_backup_*/
+*_backup/
+*.old
+*.orig
+
+# Build artifacts
+bin/
+obj/
+*.wasm
+!service/**/*.wasm
+*.wat
+
+# Documentation builds
+docs/_build/
+*.pdf
+
+# Vertex AI / GCP
+.gcloud/
+*.service-account.json
+service-account-key.json
+
+# ONNX intermediate files
+onnx-*/
+*_simplified.onnx
+*_fp16.onnx
+*_int8.onnx
+!service/assets/*_int8.onnx
+
+# Test outputs
+test_results/
+*.test.json
+coverage/
+
+# System
+.tmux/
+nohup.out
+
+# Claude artifacts
+.claude/
+!.claude/settings.local.json
+
+# Smith session data (contains local secrets and machine-specific config)
+.smith/
+.mcp.json
+
+# Deployment state artifacts (generated, not source)
+backups/
+model_compatibility_report.json
+
+# Local ML analysis environments
+ml-analysis-env/
+ml/training/.cache/
+
+# Timestamped model download directories (local training artifacts, too large for repo)
+ml/models/*-202[0-9][0-9][0-9][0-9][0-9]/
+ml/training/benchmark_outputs/
+
+# Root-level utility/exploration scripts
+get_dataset_info.py
+inspect_*.py
+search_hf*.py
+
+# Deployment packages
+*.tar.gz
+*.zip
+deployment_*.tar
+
+# Keep important docs
+!docs/
+!README.md
+!CLAUDE.md
+AGENTS.md
+
+hf_cache/
+data_out/
+
+ml/training/*.csv
+ml/models/bert-tiny-pi-v1/
+docs/DECISIONS.md

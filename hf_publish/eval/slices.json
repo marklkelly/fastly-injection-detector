@@ -1,0 +1,42 @@
+{
+  "threshold_at_1pct_fpr": 0.9403395056724548,
+  "by_source": {
+    "darkknight25/Prompt_Injection_Benign_Prompt_Dataset": {
+      "example_count": 52,
+      "pr_auc": 0.9796,
+      "precision_at_T_block": 1.0,
+      "recall_at_T_block": 0.2174,
+      "f1_at_T_block": 0.3571
+    },
+    "jayavibhav/prompt-injection": {
+      "example_count": 19809,
+      "pr_auc": 0.9937,
+      "precision_at_T_block": 0.9894,
+      "recall_at_T_block": 0.9597,
+      "f1_at_T_block": 0.9743
+    },
+    "xTRam1/safe-guard-prompt-injection": {
+      "example_count": 166,
+      "pr_auc": 1.0,
+      "precision_at_T_block": 1.0,
+      "recall_at_T_block": 0.6042,
+      "f1_at_T_block": 0.7532
+    }
+  },
+  "by_length_bucket": {
+    "<=128": {
+      "example_count": 17535,
+      "pr_auc": 0.9929,
+      "precision_at_T_block": 0.9903,
+      "recall_at_T_block": 0.9563,
+      "f1_at_T_block": 0.973
+    },
+    ">128": {
+      "example_count": 2492,
+      "pr_auc": 0.9939,
+      "precision_at_T_block": 0.9847,
+      "recall_at_T_block": 0.9561,
+      "f1_at_T_block": 0.9702
+    }
+  }
+}

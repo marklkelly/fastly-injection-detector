@@ -1,0 +1,15 @@
+# Core requirements for Edge TPU inference
+tflite-runtime>=2.5.0
+numpy<2.0
+Pillow
+
+# Optional but recommended
+scipy
+scikit-learn
+
+# For tokenization (optional - will fall back to simple tokenization if not available)
+tokenizers
+transformers
+
+# For HTTP server (optional)
+flask

@@ -1,0 +1,73 @@
+# Jailbreak classifier training configuration.
+# Trains a bert-tiny student on the pi_mix_jailbreak_v1 dataset using
+# ground-truth hard labels (no teacher distillation).
+#
+# Rationale: the jailbreak dataset uses allenai/wildjailbreak ground-truth
+# labels, which are researcher-curated and reliable. Distillation requires
+# a teacher that understands jailbreaks (e.g. Granite Guardian); using the
+# DeBERTa injection teacher on jailbreak examples produces anti-signal.
+# We train with pure cross-entropy here and revisit distillation once a
+# suitable teacher inference pipeline is in place.
+
+model:
+  artifact_name: bert-tiny-jailbreak-v1
+  backbone: prajjwal1/bert-tiny
+  num_labels: 2
+  max_length: 128
+  truncation_strategy: head_tail
+  labels:
+    "0": SAFE
+    "1": INJECTION
+  teacher_model: null
+  distillation:
+    enabled: false
+    alpha: 0.5
+    temperature: 2.0
+    teacher_max_length: 256
+    cache_teacher_logits: false
+
+dataset:
+  version: pi_mix_jailbreak_v1
+  train_path: ml/data/versions/pi_mix_jailbreak_v1/train.jsonl
+  val_path: ml/data/versions/pi_mix_jailbreak_v1/val.jsonl
+  test_path: null
+  labels_path: ml/data/versions/pi_mix_jailbreak_v1/labels.json
+
+training:
+  epochs: 5
+  max_steps: null
+  learning_rate: 5.0e-5
+  weight_decay: 0.01
+  batch_size: 32
+  eval_batch_size: 64
+  gradient_accumulation_steps: 1
+  grad_checkpointing: false
+  label_smoothing_factor: 0.0
+  logging_steps: 100
+  save_steps: 500
+  eval_steps: 500
+  save_total_limit: 3
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.05
+  warmup_steps: null
+  enable_early_stopping: true
+  early_stopping_patience: 3
+  best_model_metric: recall_at_1pct_fpr
+  seed: 42
+
+runtime:
+  device: auto
+  mixed_precision: auto
+  dataloader_workers: 4
+  quick_test: false
+
+outputs:
+  model_dir: ml/models/bert-tiny-jailbreak-v1
+  save_hf_checkpoint: true
+  save_edge_export: true
+  write_model_card: true
+  write_eval_metrics: true
+
+evaluation:
+  ood_path: null
+  prior: 0.02
