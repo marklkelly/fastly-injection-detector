@@ -46,7 +46,6 @@ fastly-injection-detector/
 |-- scripts/
 |   `-- deploy.sh
 |-- Makefile                    # All entry points
-`-- .github/workflows/ci.yml    # CI/CD pipeline
 ```
 
 ## The Model
@@ -171,7 +170,7 @@ make service-deploy
 ## Fastly Platform Constraints
 
 - Memory: 128 MB max
-- CPU time: 50 ms execution budget
+- CPU time: 50 ms soft target (production service runs at 69 ms median)
 - Binary target: `wasm32-wasip1`
 
 ## Coral TPU Experiment
